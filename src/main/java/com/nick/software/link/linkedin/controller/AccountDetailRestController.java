@@ -20,21 +20,21 @@ public class AccountDetailRestController {
         this.accountDetailService = accountDetailService;
     }
 
-    @GetMapping("vip/find/{ex}/{page}/{amount}")
+    @GetMapping("vip/total_ex/{ex}/page/{page}/amount/{amount}")
     public ResponseEntity<List<AccountDetailDto>> findByTotalExperienceGreaterThanEqual(@PathVariable int ex,
                                                                                         @PathVariable int page,
                                                                                         @PathVariable int amount){
         return new ResponseEntity<>(accountDetailService.findByTotalExperienceGreaterThanEqual(ex, page, amount), HttpStatus.OK);
     }
 
-    @GetMapping("vip/find/less/{ex}/{page}/{amount}")
+    @GetMapping("vip/find/total_ex_less_than_equal/{ex}/page/{page}/amount/{amount}")
     public ResponseEntity<List<AccountDetailDto>> findByTotalExperienceLessThanEqual(@PathVariable int ex,
                                                                                         @PathVariable int page,
                                                                                         @PathVariable int amount){
         return new ResponseEntity<>(accountDetailService.findByTotalExperienceLessThanEqual(ex, page, amount), HttpStatus.OK);
     }
 
-    @GetMapping("vip/find/between/{start}/{end}/{page}/{amount}")
+    @GetMapping("vip/find/total_ex_between/{start}/end/{end}/page/{page}/amount/{amount}")
     public ResponseEntity<List<AccountDetailDto>> findByTotalExperienceBetween(@PathVariable int start,
                                                                                      @PathVariable int end,
                                                                                      @PathVariable int page,

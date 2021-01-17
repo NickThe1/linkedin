@@ -24,12 +24,12 @@ public class AccountRestController {
         return new ResponseEntity<AccountDto>(accountDto, HttpStatus.CREATED);
     }
 
-    @GetMapping("/net/username/{username}")
+    @GetMapping("/user/username/{username}")
     public ResponseEntity<AccountDto> findByUsername(@PathVariable String username){
         return new ResponseEntity<>(accountService.findByUsername(username),HttpStatus.OK);
     }
 
-    @PutMapping("/net/username/{id}/update")
+    @PutMapping("/user/update/username_id/{id}")
     public ResponseEntity<?> updateById(@PathVariable long id, @RequestBody AccountDto accountDto){
         accountService.updateById(id, accountDto);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);

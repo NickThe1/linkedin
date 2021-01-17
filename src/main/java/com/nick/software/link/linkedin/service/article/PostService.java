@@ -1,5 +1,6 @@
 package com.nick.software.link.linkedin.service.article;
 
+import com.nick.software.link.linkedin.exception.PostExistsException;
 import com.nick.software.link.linkedin.persistence.DTO.article.PostDto;
 import com.nick.software.link.linkedin.persistence.entity.article.Post;
 import com.nick.software.link.linkedin.persistence.mapping.PostMapper;
@@ -25,11 +26,12 @@ public class PostService {
 
     public void createPost(PostDto postDto){
         Post post = PostMapper.INSTANCE.dtoToEntity(postDto);
+        if (postRepository.findByTitle(post.getTitle()).isPresent()) throw new PostExistsException(post.getTitle());
         postRepository.save(post);
     }
 
     public PostDto findByTitle(String title){
-        return PostMapper.INSTANCE.entityToDto(postRepository.findByTitle(title).get());
+        return PostMapper.INSTANCE.entityToDto(postRepository.findByTitle(title).orElseThrow( () -> new RuntimeException("post doesn't exist") ));
     }
 
     public List<PostDto> findByKeywordsContaining(String keyword, int page, int amount){

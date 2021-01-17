@@ -33,6 +33,7 @@ public class CommentService {
 
     public void createComment(CommentDto commentDto){
         Comment comment = CommentMapper.INSTANCE.dtoToEntity(commentDto);
+        if (commentRepository.findById(comment.getId()).isPresent()) throw new RuntimeException("comment exists");
         commentRepository.save(comment);
     }
 

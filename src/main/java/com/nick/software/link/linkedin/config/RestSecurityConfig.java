@@ -50,10 +50,10 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests().antMatchers("/api/v0.1/auth").permitAll()
                 .antMatchers("/api/v0.1/auth/login").permitAll()
-                .antMatchers("/api/v0.1/net/username/*").hasAuthority(Role.USER.toString())
+                .antMatchers("/api/v0.1/user/**").hasAuthority(Role.USER.toString())
                 .antMatchers("/api/v0.1/vip/**").hasAuthority("VIP")
                 .antMatchers("/api/v0.1/admin/**").hasAuthority("ADMIN")
-                //.anyRequest().hasAuthority("USER")
+                .anyRequest().hasAuthority("USER")
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));
     }

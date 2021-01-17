@@ -25,8 +25,10 @@ public class Account implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Column(unique = true)
     private String email;
 
+    @Column(unique = true)
     private String username;
 
     private String password;

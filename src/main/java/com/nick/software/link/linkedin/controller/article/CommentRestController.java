@@ -20,23 +20,23 @@ public class CommentRestController {
         this.commentService = commentService;
     }
 
-    @PostMapping("comment/create")
+    @PostMapping("user/comment")
     public ResponseEntity<?> createComment(CommentDto commentDto){
         commentService.createComment(commentDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("comment/find/username/{username}")
+    @GetMapping("user/comment/find/username/{username}")
     public ResponseEntity<List<CommentDto>> findByUsername(@PathVariable String username){
         return new ResponseEntity<>(commentService.findByAccount(username),HttpStatus.OK);
     }
 
-    @GetMapping("/comment/find/content/{body}")
+    @GetMapping("user/comment/find/content/{body}")
     public ResponseEntity<List<CommentDto>> findByBodyContaining(@PathVariable String body){
         return new ResponseEntity<>(commentService.findByBodyContaining(body), HttpStatus.OK);
     }
 
-    @GetMapping("/comment/find/post/{post_id}")
+    @GetMapping("user/comment/find/post/{post_id}")
     public ResponseEntity<List<CommentDto>> findByPost(@PathVariable long postId){
         return new ResponseEntity<>(commentService.findByPost(postId), HttpStatus.OK);
     }

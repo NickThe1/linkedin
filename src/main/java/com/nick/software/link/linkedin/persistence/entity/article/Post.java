@@ -14,6 +14,7 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Column(unique = true)
     private String title;
 
     private String keywords;

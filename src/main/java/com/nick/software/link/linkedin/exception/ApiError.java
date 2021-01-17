@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.http.HttpStatus;
 
 @Data
+//deprecated, but still used
 public class ApiError {
 
     private HttpStatus status;
