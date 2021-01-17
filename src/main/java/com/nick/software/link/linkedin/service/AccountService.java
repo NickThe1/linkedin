@@ -1,5 +1,7 @@
 package com.nick.software.link.linkedin.service;
 
+import com.nick.software.link.linkedin.exception.AccountExistsException;
+import com.nick.software.link.linkedin.exception.AccountNotFoundException;
 import com.nick.software.link.linkedin.persistence.DTO.AccountDto;
 import com.nick.software.link.linkedin.persistence.entity.Account;
 import com.nick.software.link.linkedin.persistence.entity.AccountDetail;
@@ -36,7 +38,7 @@ public class AccountService {
     public void createAccount(AccountDto accountDto){
         Account account = AccountMapper.INSTANCE.dtoToEntity(accountDto);
 
-
+        if (accountRepository.findById(account.getId()).isPresent()) throw new AccountExistsException(String.valueOf(account.getId()));
 
             account.setPassword(bCryptPasswordEncoder.encode(accountDto.getPassword()));
 
@@ -54,7 +56,8 @@ public class AccountService {
     }
 
     public AccountDto findByUsername(String username){
-        return AccountMapper.INSTANCE.entityToDto(accountRepository.findByUsername(username).get());
+        return AccountMapper.INSTANCE.entityToDto(accountRepository.findByUsername(username).orElseThrow(
+                () -> new AccountNotFoundException(username)));
     }
 
     public void updateById(long id, AccountDto accountDto){
@@ -62,6 +65,6 @@ public class AccountService {
 
         if (account.isPresent()){
             log.info("username updated", account);
-        }
+        }else  throw new AccountNotFoundException(String.valueOf(id));
     }
 }

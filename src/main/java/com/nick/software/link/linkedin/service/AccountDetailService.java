@@ -1,5 +1,6 @@
 package com.nick.software.link.linkedin.service;
 
+import com.nick.software.link.linkedin.exception.AccountDetailNotFoundException;
 import com.nick.software.link.linkedin.persistence.DTO.AccountDetailDto;
 import com.nick.software.link.linkedin.persistence.entity.AccountDetail;
 import com.nick.software.link.linkedin.persistence.mapping.AccountDetailMapper;
@@ -26,7 +27,7 @@ public class AccountDetailService {
 
     public void setAccountDetail(long id, AccountDetailDto accountDetailDto){
         if(accountDetailRepository.findById(id).isPresent()){
-            AccountDetail accountDetail = accountDetailRepository.findById(id).get();
+            AccountDetail accountDetail = accountDetailRepository.findById(id).orElseThrow( () -> new AccountDetailNotFoundException(String.valueOf(id)));
             accountDetail = AccountDetailMapper.INSTANCE.droToEntity(accountDetailDto);
             accountDetailRepository.save(accountDetail);
             log.info("account details updated", accountDetail);

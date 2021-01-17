@@ -13,5 +13,5 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     @EntityGraph(value = "Account.Resume")
     Optional<Account> findByUsername(String username);
 
-    Account findByEmail(String email);
+    Optional<Account> findByEmail(String email);
 }
