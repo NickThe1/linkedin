@@ -40,7 +40,7 @@ public class Account implements UserDetails {
     @OneToOne(fetch = FetchType.LAZY)
     private AccountDetail accountDetail;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Post> posts;
 
     @OneToMany(fetch = FetchType.LAZY)

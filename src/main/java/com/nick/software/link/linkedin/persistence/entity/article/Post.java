@@ -3,7 +3,9 @@ package com.nick.software.link.linkedin.persistence.entity.article;
 import com.nick.software.link.linkedin.persistence.entity.Account;
 import lombok.Data;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,4 +33,12 @@ public class Post {
 
     @OneToMany(fetch = FetchType.LAZY)
     private List<Comment> comments;
+
+
+    @PostConstruct
+    public void init(){
+        likes = 0;
+        dislikes = 0;
+        comments = new ArrayList<>();
+    }
 }
