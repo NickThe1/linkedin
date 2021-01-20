@@ -3,15 +3,19 @@ package com.nick.software.link.linkedin.service;
 import com.nick.software.link.linkedin.exception.AccountExistsException;
 import com.nick.software.link.linkedin.exception.AccountNotFoundException;
 import com.nick.software.link.linkedin.persistence.DTO.AccountDto;
+import com.nick.software.link.linkedin.persistence.DTO.article.CommentDto;
 import com.nick.software.link.linkedin.persistence.DTO.article.PostDto;
 import com.nick.software.link.linkedin.persistence.entity.Account;
 import com.nick.software.link.linkedin.persistence.entity.AccountDetail;
 import com.nick.software.link.linkedin.persistence.entity.Role;
+import com.nick.software.link.linkedin.persistence.entity.article.Comment;
 import com.nick.software.link.linkedin.persistence.entity.article.Post;
 import com.nick.software.link.linkedin.persistence.mapping.AccountMapper;
+import com.nick.software.link.linkedin.persistence.mapping.CommentMapper;
 import com.nick.software.link.linkedin.persistence.mapping.PostMapper;
 import com.nick.software.link.linkedin.persistence.repository.AccountDetailRepository;
 import com.nick.software.link.linkedin.persistence.repository.AccountRepository;
+import com.nick.software.link.linkedin.persistence.repository.CommentRepository;
 import com.nick.software.link.linkedin.persistence.repository.PostRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,14 +37,17 @@ public class AccountService {
 
     private PostRepository postRepository;
 
+    private CommentRepository commentRepository;
+
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public AccountService(AccountRepository accountRepository, BCryptPasswordEncoder bCryptPasswordEncoder, AccountDetailRepository accountDetailRepository, PostRepository postRepository) {
+    public AccountService(AccountRepository accountRepository, BCryptPasswordEncoder bCryptPasswordEncoder, AccountDetailRepository accountDetailRepository, PostRepository postRepository, CommentRepository commentRepository) {
         this.accountRepository = accountRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.accountDetailRepository = accountDetailRepository;
         this.postRepository = postRepository;
+        this.commentRepository = commentRepository;
     }
 
     public void createAccount(AccountDto accountDto){
@@ -88,5 +95,23 @@ public class AccountService {
         postRepository.save(post);
 
         log.info("Post added " + postDto.getTitle());
+    }
+
+    public void createComment(long id, String title, CommentDto commentDto){
+        Account account = accountRepository.findById(id).orElseThrow( () -> new AccountNotFoundException(String.valueOf(id)));
+        Post post = postRepository.findByTitle(title).orElseThrow( () -> new RuntimeException("post doesn't exist"));
+
+        Comment comment = CommentMapper.INSTANCE.dtoToEntity(commentDto);
+        comment.setAccount(account);
+        comment.setPost(post);
+
+        account.getComments().add(comment);
+        post.getComments().add(comment);
+
+        commentRepository.save(comment);
+        accountRepository.save(account);
+        postRepository.save(post);
+
+        log.info("comment saved" + comment.getId());
     }
 }

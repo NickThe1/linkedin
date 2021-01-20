@@ -1,6 +1,7 @@
 package com.nick.software.link.linkedin.controller;
 
 import com.nick.software.link.linkedin.persistence.DTO.AccountDto;
+import com.nick.software.link.linkedin.persistence.DTO.article.CommentDto;
 import com.nick.software.link.linkedin.persistence.DTO.article.PostDto;
 import com.nick.software.link.linkedin.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,12 @@ public class AccountRestController {
     @PutMapping("/user/{id}/post")
     public ResponseEntity<?> createPost(@PathVariable long id, @Valid @RequestBody PostDto postDto){
         accountService.createPost(id, postDto);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @PutMapping("/user/{id}/post/{title}/comment")
+    public ResponseEntity<?> createPost(@PathVariable long id, @PathVariable String title, @Valid @RequestBody CommentDto postDto){
+        accountService.createComment(id, title, postDto);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 }
